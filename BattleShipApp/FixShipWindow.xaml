@@ -1,0 +1,19 @@
+﻿<Window x:Class="BattleshipGame.FixShipWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Select Part to Fix" Height="400" Width="400"
+        WindowStartupLocation="CenterScreen" ResizeMode="NoResize" WindowStyle="ToolWindow">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="CLICK A RED BLOCK TO REPAIR IT" 
+                   Background="Black" Foreground="White" 
+                   FontWeight="Bold" TextAlignment="Center" Padding="10"/>
+
+        <UniformGrid Name="FixGrid" Rows="10" Columns="10" Grid.Row="1" Background="LightGray"/>
+    </Grid>
+</Window>

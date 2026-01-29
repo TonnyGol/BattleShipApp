@@ -1,0 +1,28 @@
+{
+  "MqttBrokerIp": "broker.hivemq.com",
+  "MqttTopics": {
+    "MessagesReceive": "Red_pc_out",
+    "I_am_alive": "Red_pc_in",
+    "PlayFlow": "PlayFlow",
+    "EnemyTeamTablet": "redAttackPanel",
+    "EnemyTeam": "Blue_pc_out",
+    "Led": "addressable"
+  },
+  "MqttMessages": {
+    "I_am_alive": "I_am_alive",
+    "Reset": "ACTION,reset@",
+    "StartIntro": "run",
+    "Skip": "skip",
+    "ShipPlaced": "ship_done",
+    "TeamReady": "ships_done",
+    "GameStart": "gameStartin",
+    "ShieldPuzzel": "shield",
+    "StrategicPuzzel": "strategy",
+    "FixPartsPuzzel":  "destroyed_fix"
+  },
+  "ClientIdPrefix": "BattleShipPlayer2",
+  "Scores": {
+    "AttackScore": "5",
+    "DestroyScore": "50"
+  }
+}

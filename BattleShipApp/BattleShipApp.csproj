@@ -1,0 +1,328 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="resources\ExclamationMark.png" />
+    <None Remove="resources\explosionAnimation\explosion_%280%29.png" />
+    <None Remove="resources\explosionAnimation\explosion_%281%29.png" />
+    <None Remove="resources\explosionAnimation\explosion_%2810%29.png" />
+    <None Remove="resources\explosionAnimation\explosion_%2811%29.png" />
+    <None Remove="resources\explosionAnimation\explosion_%2812%29.png" />
+    <None Remove="resources\explosionAnimation\explosion_%2813%29.png" />
+    <None Remove="resources\explosionAnimation\explosion_%2814%29.png" />
+    <None Remove="resources\explosionAnimation\explosion_%2815%29.png" />
+    <None Remove="resources\explosionAnimation\explosion_%2816%29.png" />
+    <None Remove="resources\explosionAnimation\explosion_%2817%29.png" />
+    <None Remove="resources\explosionAnimation\explosion_%2818%29.png" />
+    <None Remove="resources\explosionAnimation\explosion_%2819%29.png" />
+    <None Remove="resources\explosionAnimation\explosion_%282%29.png" />
+    <None Remove="resources\explosionAnimation\explosion_%2820%29.png" />
+    <None Remove="resources\explosionAnimation\explosion_%2821%29.png" />
+    <None Remove="resources\explosionAnimation\explosion_%2822%29.png" />
+    <None Remove="resources\explosionAnimation\explosion_%2823%29.png" />
+    <None Remove="resources\explosionAnimation\explosion_%2824%29.png" />
+    <None Remove="resources\explosionAnimation\explosion_%2825%29.png" />
+    <None Remove="resources\explosionAnimation\explosion_%2826%29.png" />
+    <None Remove="resources\explosionAnimation\explosion_%2827%29.png" />
+    <None Remove="resources\explosionAnimation\explosion_%2828%29.png" />
+    <None Remove="resources\explosionAnimation\explosion_%2829%29.png" />
+    <None Remove="resources\explosionAnimation\explosion_%283%29.png" />
+    <None Remove="resources\explosionAnimation\explosion_%2830%29.png" />
+    <None Remove="resources\explosionAnimation\explosion_%2831%29.png" />
+    <None Remove="resources\explosionAnimation\explosion_%2832%29.png" />
+    <None Remove="resources\explosionAnimation\explosion_%2833%29.png" />
+    <None Remove="resources\explosionAnimation\explosion_%2834%29.png" />
+    <None Remove="resources\explosionAnimation\explosion_%2835%29.png" />
+    <None Remove="resources\explosionAnimation\explosion_%2836%29.png" />
+    <None Remove="resources\explosionAnimation\explosion_%2837%29.png" />
+    <None Remove="resources\explosionAnimation\explosion_%2838%29.png" />
+    <None Remove="resources\explosionAnimation\explosion_%2839%29.png" />
+    <None Remove="resources\explosionAnimation\explosion_%284%29.png" />
+    <None Remove="resources\explosionAnimation\explosion_%2840%29.png" />
+    <None Remove="resources\explosionAnimation\explosion_%2841%29.png" />
+    <None Remove="resources\explosionAnimation\explosion_%2842%29.png" />
+    <None Remove="resources\explosionAnimation\explosion_%2843%29.png" />
+    <None Remove="resources\explosionAnimation\explosion_%2844%29.png" />
+    <None Remove="resources\explosionAnimation\explosion_%2845%29.png" />
+    <None Remove="resources\explosionAnimation\explosion_%2846%29.png" />
+    <None Remove="resources\explosionAnimation\explosion_%2847%29.png" />
+    <None Remove="resources\explosionAnimation\explosion_%285%29.png" />
+    <None Remove="resources\explosionAnimation\explosion_%286%29.png" />
+    <None Remove="resources\explosionAnimation\explosion_%287%29.png" />
+    <None Remove="resources\explosionAnimation\explosion_%288%29.png" />
+    <None Remove="resources\explosionAnimation\explosion_%289%29.png" />
+    <None Remove="resources\missAnimation\miss_%280%29.png" />
+    <None Remove="resources\missAnimation\miss_%281%29.png" />
+    <None Remove="resources\missAnimation\miss_%2810%29.png" />
+    <None Remove="resources\missAnimation\miss_%2811%29.png" />
+    <None Remove="resources\missAnimation\miss_%2812%29.png" />
+    <None Remove="resources\missAnimation\miss_%2813%29.png" />
+    <None Remove="resources\missAnimation\miss_%282%29.png" />
+    <None Remove="resources\missAnimation\miss_%283%29.png" />
+    <None Remove="resources\missAnimation\miss_%284%29.png" />
+    <None Remove="resources\missAnimation\miss_%285%29.png" />
+    <None Remove="resources\missAnimation\miss_%286%29.png" />
+    <None Remove="resources\missAnimation\miss_%287%29.png" />
+    <None Remove="resources\missAnimation\miss_%288%29.png" />
+    <None Remove="resources\missAnimation\miss_%289%29.png" />
+    <None Remove="resources\Place_1_Ship.mp4" />
+    <None Remove="resources\Place_2_Ship.mp4" />
+    <None Remove="resources\Place_3_Ship.mp4" />
+    <None Remove="resources\Place_4_Ship.mp4" />
+    <None Remove="resources\Place_5_Ship.mp4" />
+    <None Remove="resources\redScreen.jpg" />
+    <None Remove="resources\shield.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="resources\ExclamationMark.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\explosionAnimation\explosion_(0).png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\explosionAnimation\explosion_(1).png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\explosionAnimation\explosion_(10).png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\explosionAnimation\explosion_(11).png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\explosionAnimation\explosion_(12).png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\explosionAnimation\explosion_(13).png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\explosionAnimation\explosion_(14).png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\explosionAnimation\explosion_(15).png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\explosionAnimation\explosion_(16).png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\explosionAnimation\explosion_(17).png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\explosionAnimation\explosion_(18).png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\explosionAnimation\explosion_(19).png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\explosionAnimation\explosion_(2).png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\explosionAnimation\explosion_(20).png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\explosionAnimation\explosion_(21).png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\explosionAnimation\explosion_(22).png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\explosionAnimation\explosion_(23).png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\explosionAnimation\explosion_(24).png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\explosionAnimation\explosion_(25).png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\explosionAnimation\explosion_(26).png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\explosionAnimation\explosion_(27).png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\explosionAnimation\explosion_(28).png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\explosionAnimation\explosion_(29).png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\explosionAnimation\explosion_(3).png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\explosionAnimation\explosion_(30).png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\explosionAnimation\explosion_(31).png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\explosionAnimation\explosion_(32).png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\explosionAnimation\explosion_(33).png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\explosionAnimation\explosion_(34).png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\explosionAnimation\explosion_(35).png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\explosionAnimation\explosion_(36).png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\explosionAnimation\explosion_(37).png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\explosionAnimation\explosion_(38).png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\explosionAnimation\explosion_(39).png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\explosionAnimation\explosion_(4).png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\explosionAnimation\explosion_(40).png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\explosionAnimation\explosion_(41).png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\explosionAnimation\explosion_(42).png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\explosionAnimation\explosion_(43).png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\explosionAnimation\explosion_(44).png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\explosionAnimation\explosion_(45).png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\explosionAnimation\explosion_(46).png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\explosionAnimation\explosion_(47).png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\explosionAnimation\explosion_(5).png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\explosionAnimation\explosion_(6).png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\explosionAnimation\explosion_(7).png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\explosionAnimation\explosion_(8).png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\explosionAnimation\explosion_(9).png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Instructions.mp4">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\missAnimation\miss_(0).png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\missAnimation\miss_(1).png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\missAnimation\miss_(10).png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\missAnimation\miss_(11).png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\missAnimation\miss_(12).png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\missAnimation\miss_(13).png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\missAnimation\miss_(2).png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\missAnimation\miss_(3).png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\missAnimation\miss_(4).png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\missAnimation\miss_(5).png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\missAnimation\miss_(6).png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\missAnimation\miss_(7).png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\missAnimation\miss_(8).png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\missAnimation\miss_(9).png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Place_1_Ship.mp4">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Place_2_Ship.mp4">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Place_3_Ship.mp4">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Place_4_Ship.mp4">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Place_5_Ship.mp4">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\redScreen.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\shieldInfo.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\shield.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MQTTnet" Version="5.0.1.1416" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="config.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\bg.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\blueScreen.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\border.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="AppConfig.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+  </ItemGroup>
+
+</Project>
