@@ -6,13 +6,12 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace BattleShipApp // <--- Ensure this matches your Main Window namespace
+namespace BattleShipApp 
 {
     public class MqttService
     {
         private readonly IMqttClient _mqttClient;
 
-        // CHANGE 1: Use the specific "Client" factory
         private readonly MqttClientFactory _mqttFactory;
 
         public event Action<string, string>? MessageReceived;

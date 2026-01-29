@@ -7,7 +7,6 @@ namespace BattleShipApp
         public InstructionsWindow()
         {
             InitializeComponent();
-            // This allows dragging the window by clicking anywhere on it
             this.MouseLeftButtonDown += (s, e) => this.DragMove();
         }
 

@@ -13,13 +13,14 @@ namespace BattleShipApp
 {
     public partial class MainWindow : Window
     {
-        private MqttService _mqttService;
         private AppConfig? _appConfig;
+        private MqttService _mqttService;
 
         private bool _keepSending = true;
 
-        private DispatcherTimer _gameTimer;
         private TimeSpan _time;
+        private DispatcherTimer _gameTimer;
+        
         private int _currentScore;
 
         private string[][] gameBoard;
@@ -27,28 +28,24 @@ namespace BattleShipApp
 
         private DispatcherTimer _placementTimer;
         private bool _isPlacementTimerRunning = false;
-        private readonly List<int> _timerShipIndices = new List<int> { 1, 2, 3 };
-
-        private bool _isFinalizing = false; 
-        private CancellationTokenSource _cancellationSource; 
 
         private List<int>[] _myShips;
-        private List<int>[] _enemyShips = new List<int>[5];
-
+        private int _currentShipIndex = 0;
+        private int _partsReceivedCount = 0;
         private readonly int[] _shipSizes = { 5, 4, 3, 3, 2 };
 
-        private int _currentShipIndex = 0;
+        private List<int>[] _enemyShips = new List<int>[5];
 
-        private int _partsReceivedCount = 0;
-
-        private SpriteAnimator _shieldBreakAnim;
         private SpriteAnimator _missAnim;
         private SpriteAnimator _explosionAnim;
+        private SpriteAnimator _shieldBreakAnim;
 
-        private const string destroyedShipPart = "destroyed";
         private const string shipPart = "ship";
         private const string shieldPart = "shield";
+        private const string destroyedShipPart = "destroyed";
 
+        // Initializers
+        // -----------------
         public MainWindow()
         {
             InitializeComponent();
@@ -56,16 +53,13 @@ namespace BattleShipApp
             // 1. Read the text from the file
             string jsonString = File.ReadAllText("config.json");
 
-            // 2. Convert (Deserialize) text to C# Object
             _appConfig = JsonSerializer.Deserialize<AppConfig>(jsonString);
 
-            // 2. Initialize the service
+            // 2. Create the MQTT Service
             _mqttService = new MqttService();
 
-            // 3. Subscribe to the event (Listen for incoming messages)
             _mqttService.MessageReceived += OnMqttMessageReceived;
 
-            // 4. Start the connection automatically
             InitializeMqtt();
 
             InitializeGameStats();
@@ -82,9 +76,7 @@ namespace BattleShipApp
                 new string[10] { " ", " ", " ", " ", " ", " ", " ", " ", " ", " " }
             ];
 
-            // Initialize the array for 5 ships
             _myShips = new List<int>[5];
-
             for (int i = 0; i < 5; i++)
             {
                 _myShips[i] = new List<int>();
@@ -119,14 +111,13 @@ namespace BattleShipApp
 
         private void InitializeGameStats()
         {
-            // 1. Setup Initial Score
-            _currentScore = 0; // Or whatever starting score you want
+            _currentScore = 0; 
             ScoreText.Text = _currentScore.ToString();
 
             // 2. Setup Timer for 60 Minutes
-            _time = TimeSpan.FromMinutes(5);
+            _time = TimeSpan.FromMinutes(5); // 5 minutes for testing
             _gameTimer = new DispatcherTimer();
-            _gameTimer.Interval = TimeSpan.FromSeconds(1); // Tick every 1 second
+            _gameTimer.Interval = TimeSpan.FromSeconds(1); 
             _gameTimer.Tick += GameTimer_Tick;
         }
 
@@ -142,14 +133,17 @@ namespace BattleShipApp
                 14,
                 100
                 );
-
-
         }
 
+        // MQTT MESSAGE HANDLER
+        // ------------------------
 
         private void OnMqttMessageReceived(string message, string topic)
         {
-            // IMPORTANT: We must use the Dispatcher to update the UI
+            if (_appConfig == null)
+                throw new Exception("AppConfig is null");
+
+            // We must use the Dispatcher to update the UI
             Dispatcher.Invoke(() =>
             {
                 string playFlowTopic = _appConfig.MqttTopics["PlayFlow"];
@@ -173,6 +167,9 @@ namespace BattleShipApp
 
         private void HandlePlayFlowMessages(string message)
         {
+            if (_appConfig == null)
+                throw new Exception("AppConfig is null");
+
             if (message == _appConfig.MqttMessages["Reset"])
             {
                 InitialScreen.Visibility = Visibility.Visible;
@@ -205,9 +202,12 @@ namespace BattleShipApp
 
         private void HandleGameRecevieMessages(string message)
         {
+            if (_appConfig == null)
+                throw new Exception("AppConfig is null");
+
             if (message == _appConfig.MqttMessages["ShieldPuzzel"])
             {
-                OpenShieldClueDialogAsync();
+                _ = OpenShieldClueDialogAsync();
             }
             else if (message == _appConfig.MqttMessages["StrategicPuzzel"])
             {
@@ -231,7 +231,7 @@ namespace BattleShipApp
                     // 1. Update the internal data
                     UpdateBoardData(blockPosition);
 
-                    // 3. Check game rules (Did we finish a ship?)
+                    // 3. Check ship placement rules (Did we finish a ship?)
                     ProcessShipSequence(blockPosition);
                 }
             }
@@ -284,24 +284,8 @@ namespace BattleShipApp
             }
         }
 
-        private void ResetApp() {
-            try
-            {
-                string exePath = System.Diagnostics.Process.GetCurrentProcess().MainModule!.FileName!;
-                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
-                {
-                    FileName = exePath,
-                    UseShellExecute = true
-                });
-                Application.Current.Shutdown();
-
-            }
-            catch (Exception ex)
-            {
-                Application.Current.Shutdown();
-                //MessageBox.Show("Error restarting application: " + ex.Message);
-            }
-        }
+        // GAME LOGIC METHODS
+        // ------------------------
 
         private void CheckIfShipSunk_enemy(int hitBlockID, string[][] currentEnemyBoard)
         {
@@ -339,7 +323,7 @@ namespace BattleShipApp
                             UpdateBoardUI(shipBlockID, System.Windows.Media.Brushes.Blue);
                         }
                         AddScore(50);
-                        MessageBox.Show("Boom! Enemy Ship Sunk!");
+                        ShowTemporaryMessage("Boom! Enemy Ship Sunk!");
                     }
                     return;
                 }
@@ -360,19 +344,8 @@ namespace BattleShipApp
             // We use pattern matching 'is' to keep it safe and clean
             if (this.FindName(borderName) is Border targetBorder)
             {
-                //if (color == System.Windows.Media.Brushes.Blue)
-                //{
-                //    targetBorder.BorderThickness = new Thickness(4);
-                //    targetBorder.BorderBrush = color;
-                //}
-                //else
-                //{
-                //    targetBorder.Background = color;
-                //}
-
                 targetBorder.BorderThickness = new Thickness(4);
                 targetBorder.BorderBrush = color;
-
             }
         }
 
@@ -437,20 +410,22 @@ namespace BattleShipApp
                     string videoPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "resources", $"Place_{_currentShipIndex+1}_Ship.mp4");
                     PlacementVideoPlayer.Source = new Uri(videoPath);
 
-                    PlacementVideoPlayer.Visibility = Visibility.Visible; // Show it
+                    PlacementVideoPlayer.Visibility = Visibility.Visible;
                     PlacementVideoPlayer.Position = TimeSpan.Zero; // Rewind
-                    PlacementVideoPlayer.Play(); // Start playing
+                    PlacementVideoPlayer.Play(); 
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show("Error playing video: " + ex.Message);
                 }
-                // MessageBox.Show("20 Seconds to place ship started!"); 
             }
         }
 
         private async void ProcessAttack(string[] cordinates)
         {
+            if (_appConfig == null)
+                throw new Exception("AppConfig is null");
+
             foreach (string block in cordinates)
             {
                 int blockPosition = int.Parse(block);
@@ -459,7 +434,7 @@ namespace BattleShipApp
                 int col = (blockPosition - 1) % 10;
 
                 string cellContent = gameBoard[row][col];
-                string scoreToAdd = "0"; // Default to 0
+                string scoreToAdd = "0"; 
 
                 switch (cellContent)
                 {
@@ -497,33 +472,30 @@ namespace BattleShipApp
 
             if (IsBlockOccupied(blockPosition))
             {
-                MessageBox.Show("Block is already occupied!");
+                ShowTemporaryMessage("Block is already occupied!");
                 return;
             }
 
             _myShips[_currentShipIndex].Add(blockPosition);
             _partsReceivedCount++;
-            //UpdateBoardUI(blockPosition, System.Windows.Media.Brushes.Yellow);
 
         }
 
-        // 3. THE TIMER CALLBACK (Runs after 20 seconds)
         private async void OnPlacementTimerElapsed(object sender, EventArgs e)
         {
             _placementTimer.Stop();
             _isPlacementTimerRunning = false;
 
             PlacementVideoPlayer.Stop();
-            PlacementVideoPlayer.Visibility = Visibility.Collapsed; // Hide it again
+            PlacementVideoPlayer.Visibility = Visibility.Collapsed;
 
-            // The timer finished. Now we look at what the user did.
             int targetSize = _shipSizes[_currentShipIndex];
             int actualCount = _myShips[_currentShipIndex].Count;
 
             // CASE 1: TOO FEW BLOCKS
             if (actualCount < targetSize)
             {
-                MessageBox.Show($"Time's up! incomplete ship.\nExpected {targetSize}, found {actualCount}.");
+                ShowTemporaryMessage($"Time's up! incomplete ship.\nExpected {targetSize}, found {actualCount}.");
                 ResetCurrentShip();
                 return;
             }
@@ -531,7 +503,7 @@ namespace BattleShipApp
             // CASE 2: TOO MANY BLOCKS
             if (actualCount > targetSize)
             {
-                MessageBox.Show($"Time's up! Too many blocks placed.\nExpected {targetSize}, found {actualCount}.");
+                ShowTemporaryMessage($"Time's up! Too many blocks placed.\nExpected {targetSize}, found {actualCount}.");
                 ResetCurrentShip();
                 return;
             }
@@ -539,7 +511,7 @@ namespace BattleShipApp
             // CASE 3: CORRECT COUNT (Now check Shape)
             if (!IsValidShip(_myShips[_currentShipIndex]))
             {
-                MessageBox.Show($"Time's up! Invalid shape.\nBlocks must be connected and straight.");
+                ShowTemporaryMessage($"Time's up! Invalid shape.\nBlocks must be connected and straight.");
                 ResetCurrentShip();
                 return;
             }
@@ -550,13 +522,14 @@ namespace BattleShipApp
         }
 
         // --- HELPER FUNCTIONS ---
+        // ------------------------
 
         private async Task FinalizeCurrentShip()
         {
             // 1. Validate Shape (Double check for the immediate logic path)
             if (!IsValidShip(_myShips[_currentShipIndex]))
             {
-                MessageBox.Show($"Invalid Ship Shape!");
+                ShowTemporaryMessage($"Invalid Ship Shape!");
                 ResetCurrentShip();
                 return;
             }
@@ -567,7 +540,6 @@ namespace BattleShipApp
                 int row = (item - 1) / 10;
                 int col = (item - 1) % 10;
                 gameBoard[row][col] = shipPart;
-                //UpdateBoardUI(item, System.Windows.Media.Brushes.Gray);
             }
 
             // 3. Move Next
@@ -581,7 +553,7 @@ namespace BattleShipApp
             // 4. Check End Game
             if (_currentShipIndex >= _shipSizes.Length)
             {
-                MessageBox.Show("All ships placed! Ready for war.");
+                ShowTemporaryMessage("All ships placed! Ready for war.");
                 string jsonBoard = JsonSerializer.Serialize(gameBoard);
                 string jsonShips = JsonSerializer.Serialize(_myShips);
                 await _mqttService.PublishAsync(_appConfig.MqttTopics["EnemyTeam"], $"b|{jsonBoard}|{jsonShips}");
@@ -608,9 +580,8 @@ namespace BattleShipApp
         {
             parts.Sort();
 
-            // 2. Check if it is a valid HORIZONTAL line
             bool isHorizontal = true;
-            int rowToCheck = (parts[0] - 1) / 10; // The row of the first block
+            int rowToCheck = (parts[0] - 1) / 10; 
 
             for (int i = 0; i < parts.Count - 1; i++)
             {
@@ -659,8 +630,66 @@ namespace BattleShipApp
             return false;
         }
 
+        public void AddScore(int points)
+        {
+            _currentScore += points;
+            ScoreText.Text = _currentScore.ToString();
+        }
+
+        private void ShowTemporaryMessage(string message, int durationMs = 3000)
+        {
+            // Create a simple temporary window
+            Window msgWindow = new Window()
+            {
+                WindowStyle = WindowStyle.None,       // No title bar/borders
+                ResizeMode = ResizeMode.NoResize,     // Cannot resize
+                AllowsTransparency = true,            // Optional: for rounded corners if you want
+                Background = Brushes.DarkRed,         // Theme Color (Red for Error)
+                Width = 400,
+                Height = 150,
+                Topmost = true,                       // Always on top
+                WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                ShowInTaskbar = false                 // Don't show in Windows taskbar
+            };
+
+            // Add the Text
+            Border border = new Border()
+            {
+                BorderThickness = new Thickness(2),
+                BorderBrush = Brushes.White,
+                Padding = new Thickness(20)
+            };
+
+            TextBlock textBlock = new TextBlock()
+            {
+                Text = message,
+                Foreground = Brushes.White,
+                FontSize = 20,
+                TextWrapping = TextWrapping.Wrap,
+                TextAlignment = TextAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center,
+                HorizontalAlignment = HorizontalAlignment.Center
+            };
+
+            border.Child = textBlock;
+            msgWindow.Content = border;
+
+            msgWindow.Show();
+
+            Task.Delay(durationMs).ContinueWith(_ =>
+            {
+                // Dispatcher to close the UI window safely
+                Dispatcher.Invoke(() => msgWindow.Close());
+            });
+        }
+
+        // CLUE DIALOG METHODS
+        // ------------------------
+
         private async Task OpenShieldClueDialogAsync()
         {
+            if (_appConfig == null)
+                throw new Exception("AppConfig is null");
 
             ShieldClueWindow shieldClue = new ShieldClueWindow(gameBoard);
 
@@ -670,14 +699,12 @@ namespace BattleShipApp
                 gameBoard[(int)p.X][(int)p.Y] = shieldPart;
                 int blockPosition = ((int)p.X * 10) + (int)p.Y + 1;
                 await _mqttService.PublishAsync(_appConfig.MqttTopics["Led"], $"y{blockPosition}");
-                //UpdateBoardUI(blockPosition, Brushes.Yellow);
             }
         }
 
         private async void OpenStrategyClueDialog()
         {
-            MessageBox.Show("Spy Satellite Activated!\n\nYou will see the enemy's board for exactly 3 seconds.\nMemorize the ship locations!",
-                            "Strategy Clue");
+            ShowTemporaryMessage("Spy Satellite Activated!\n\nYou will see the enemy's board for exactly 3 seconds.\nMemorize the ship locations!");
 
             SpyBoardWindow spyWindow = new SpyBoardWindow(enemyBoard);
 
@@ -690,30 +717,21 @@ namespace BattleShipApp
 
         private void OpenFixShipPartClueDialog()
         {
-            // 1. Show explanation
-            MessageBox.Show("Damage Control Team Ready!\n\nSelect a DESTROYED ship part to repair instantly.",
-                            "Fix Ship Clue");
+            ShowTemporaryMessage("Damage Control Team Ready!\n\nSelect a DESTROYED ship part to repair instantly.");
 
-            // 2. Open the selection window (Modal)
             // We pass the gameBoard so the window knows which parts are 'destroyed'
             FixShipWindow fixWindow = new FixShipWindow(gameBoard, _myShips);
 
-            // 3. Wait for the user to pick a block
+            // Wait for the user to pick a block
             if (fixWindow.ShowDialog() == true)
             {
                 int blockID = fixWindow.SelectedBlockID;
                 int r = (blockID - 1) / 10;
                 int c = (blockID - 1) % 10;
 
-                // 4. Update Logic (Server/Local Data)
-                // Change the status back from "destroyed" to "ship"
-                gameBoard[r][c] = "ship";
+                gameBoard[r][c] = shipPart;
 
-                // 5. Update UI (Main Window)
-                // Change color back to Gray (Standard Ship Color)
-                //UpdateBoardUI(blockID+1, Brushes.Transparent);
-
-                MessageBox.Show("Repair successful! Structure integrity restored.");
+                ShowTemporaryMessage("Repair successful! Structure integrity restored.");
             }
         }
 
@@ -729,6 +747,9 @@ namespace BattleShipApp
             OpenInstructionsDialog();
         }
 
+        // EVENT HANDLERS
+        // ------------------------
+
         private void InstructionVideo_MediaEnded(object sender, RoutedEventArgs e)
         {
             InstructionVideo.Visibility = Visibility.Collapsed;
@@ -741,9 +762,12 @@ namespace BattleShipApp
             MessageBox.Show($"InstructionVideo Failed: {e.ErrorException.Message}");
         }
 
-        // Key Down Event Handler (for testing purposes of mqtt messages recive)
+        // Key Down Event Handler (for testing purposes of mqtt messages recieve
         private async void Window_KeyDown(object sender, KeyEventArgs e)
         {
+            if (_appConfig == null)
+                throw new Exception("AppConfig is null");
+
             switch (e.Key)
             {
                 case Key.S:
@@ -756,24 +780,19 @@ namespace BattleShipApp
 
                 case Key.Space:
                     await _mqttService.PublishAsync(_appConfig.MqttTopics["PlayFlow"], "skip");
-                    //OpenSpamDialog();
                     break;
 
                 case Key.Escape:
-                    // Close the app or show pause menu
                     this.Close();
                     break;
             }
         }
 
-        public void AddScore(int points)
-        {
-            _currentScore += points;
-            ScoreText.Text = _currentScore.ToString();
-        }
-
         private async void GameTimer_Tick(object sender, EventArgs e)
         {
+            if (_appConfig == null)
+                throw new Exception("AppConfig is null");
+
             if (_time == TimeSpan.Zero)
             {
                 _gameTimer.Stop();
@@ -783,7 +802,7 @@ namespace BattleShipApp
             }
             else
             {
-                _time = _time.Add(TimeSpan.FromSeconds(-1)); // Subtract 1 second
+                _time = _time.Add(TimeSpan.FromSeconds(-1));
                 // Format as MM:SS (e.g., 59:59)
                 TimerText.Text = _time.ToString(@"mm\:ss");
             }
@@ -791,7 +810,10 @@ namespace BattleShipApp
 
         private async Task SendEndGameResultAsync(int redTeamScore)
         {
-            if(_currentScore > redTeamScore)
+            if (_appConfig == null)
+                throw new Exception("AppConfig is null");
+
+            if (_currentScore > redTeamScore)
             {
                 await _mqttService.PublishAsync(_appConfig.MqttTopics["PlayFlow"], "Win");
             }
@@ -801,8 +823,31 @@ namespace BattleShipApp
             }
         }
 
+        private void ResetApp()
+        {
+            try
+            {
+                string exePath = System.Diagnostics.Process.GetCurrentProcess().MainModule!.FileName!;
+                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                {
+                    FileName = exePath,
+                    UseShellExecute = true
+                });
+                Application.Current.Shutdown();
+
+            }
+            catch (Exception ex)
+            {
+                Application.Current.Shutdown();
+                //MessageBox.Show("Error restarting application: " + ex.Message);
+            }
+        }
+
         private async Task StartPeriodicSender()
         {
+            if (_appConfig == null)
+                throw new Exception("AppConfig is null");
+
             while (_keepSending)
             {
                 try
@@ -823,6 +868,8 @@ namespace BattleShipApp
             }
         }
 
-        
+        // -----------------------------------------------------------------------------------------
+        // XAML EXTRA FEATURES
+
     }
 }

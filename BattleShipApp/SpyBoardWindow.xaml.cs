@@ -6,9 +6,6 @@ namespace BattleshipGame
 {
     public partial class SpyBoardWindow : Window
     {
-        // Constructor that accepts the enemy board data
-        // Assuming enemyBoard is a jagged array: string[][]
-        // If yours is 2D (string[,]), let me know and I will adjust the loop.
         public SpyBoardWindow(string[][] enemyBoard)
         {
             InitializeComponent();

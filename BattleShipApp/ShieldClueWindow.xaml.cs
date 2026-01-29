@@ -8,10 +8,7 @@ namespace BattleShipApp
     {
         private const string water = " ";
 
-        // Property to store the result
         public Point SelectedCoordinate { get; private set; } = new Point(-1, -1);
-
-        // Constructor now accepts string[][]
         public ShieldClueWindow(string[][] gameBoard)
         {
             InitializeComponent();
