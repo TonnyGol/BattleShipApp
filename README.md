@@ -1,42 +1,109 @@
-Battleship Hybrid: Physical-to-Digital Game 
-An interactive Battleship game that bridges the gap between physical props and digital UI. This project uses WPF (.NET) for the game dashboard and MQTT for real-time communication between hardware sensors and the game engine.
+# ⚓ Battleship Hybrid
+### A Physical-to-Digital Interactive Game
 
-Status: 🚧 Work in Progress. Current focus is on tests between 2 teams for Game and App flow and changing and creating UI and Style .
+An interactive **Battleship experience** that bridges the gap between **physical gameplay** and a **digital game engine**.
 
-🚀 The Concept
-Unlike a standard digital game, this project is designed to work with physical "blocks" and "ship props."
+This project combines a **sensor-equipped board** with a **WPF desktop application**, using **MQTT** for real-time communication between hardware and software.
 
-Players place physical ships onto a sensor-equipped board.
+---
 
-Sensors send MQTT messages (e.g., y42) to the application.
+## 🚧 Project Status
 
-The WPF application validates the placement in real-time, handling edge cases like disjointed ships or "over-placement" through software logic.
+**Work in Progress**
 
-🛠 Tech Stack
-Language: C# / .NET
+Current focus:
+- Cross-team gameplay flow testing  
+- UI/UX redesign and visual styling  
+- Hardware ↔ Application communication improvements  
 
-UI Framework: WPF (Windows Presentation Foundation)
+---
 
-Communication: MQTT (via HiveMQ Broker for tests / MQTT local broker at the end)
+## 🚀 The Concept
 
-Graphics: GDI+ & Sprite-based animations (custom cached frame-rendering)
+Unlike a standard digital Battleship game, this system uses **real physical ship pieces**.
 
-🧠 Key Features & Logic
-1. Advanced Placement Validation
-To handle the limitations of physical sensors (which can't "see" which ship is being placed), the system uses a state-machine approach:
+### 🔄 How It Works
 
-Strict Adjacency: Every block placed must be adjacent to the previous one to prevent gaps.
+1. Players place **physical ship blocks** on a sensor-enabled board  
+2. Sensors detect placements and send MQTT messages (example: `y42`)  
+3. The WPF application:
+   - Interprets coordinates  
+   - Validates ship placement in real time  
+   - Enforces game rules and handles edge cases  
 
-Alignment Locking: Once the second block is placed, the ship is locked into a horizontal or vertical axis.
+> 💡 Hardware provides **raw position data** — the software provides **game intelligence**
 
-Stability Delay: For specific ship sizes, the game waits 1.5–2 seconds after the last block is detected. If a "bonus" block is detected during this time, the ship is rejected (preventing players from accidentally merging ships).
+---
 
-2. High-Performance Animations
-To keep the UI responsive, animations (like shield hits and misses) are handled via a SpriteAnimatorCached class. Instead of cropping images on the fly, frames are pre-cached into ImageBrush objects and frozen in memory to ensure 60FPS playback without CPU spikes.
+## 🛠 Tech Stack
 
-3. Cross-Team Communication
-The game uses a "Red Team vs. Blue Team" architecture.
+| Layer | Technology |
+|------|------------|
+| **Language** | C# / .NET |
+| **UI Framework** | WPF (Windows Presentation Foundation) |
+| **Communication** | MQTT |
+| **Broker (Testing)** | HiveMQ |
+| **Broker (Final System)** | Local MQTT Broker |
+| **Graphics** | GDI+ with Sprite-Based Animations |
 
-Score exchange happens automatically via MQTT when the game timer hits zero.
+---
 
-The Blue Team client acts as the final judge, comparing scores and publishing the "Win/Lose" state to the PlayFlow topic.
+## 🧠 Core Features & Game Logic
+
+### 🎯 Advanced Placement Validation
+
+Because sensors only detect **positions** (not ship identity), the game uses a **state-machine-based validation system**.
+
+#### 🔗 Strict Adjacency
+Each newly placed block must be directly adjacent to the previous one.
+
+Prevents:
+- Gaps inside ships  
+- Illegal floating segments  
+
+---
+
+#### 📏 Alignment Locking
+After the **second block** is placed:
+- The ship is locked into **horizontal** *or* **vertical** alignment  
+- Further blocks must follow the same axis  
+
+---
+
+#### ⏳ Stability Delay (Anti-Merge Protection)
+the system waits **20 seconds** for each ship to be placed and then checks her placement.
+
+If an extra block appears during this delay:
+- The placement is rejected  
+- Prevents accidental merging of two ships  
+
+---
+
+## 🎞 High-Performance Animation System
+
+Animations are handled by a custom caching system:
+
+### `SpriteAnimatorCached`
+
+Instead of cropping images in real time:
+- Frames are **pre-cached**
+- Stored as **frozen `ImageBrush` objects**
+- Reused during playback  
+
+**Result:**
+- Smooth 60 FPS animations  
+- Minimal CPU usage  
+- Responsive gameplay visuals  
+
+---
+
+## 🔴🔵 Cross-Team Game Architecture
+
+The system supports **Red Team vs. Blue Team** competitive gameplay.
+
+### 🧩 Result Flow
+
+1. Each team runs its own game client  
+2. Game state is exchanged via **MQTT topics**  
+3. When the match timer hits zero:
+   - Scores are auto
